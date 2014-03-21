@@ -33,6 +33,7 @@ GameManager.prototype.isGameTerminated = function () {
 // Set up the game
 GameManager.prototype.setup = function () {
   this.score = 0;
+  this.actuator.resetWangScores();
   this.birdpos = 0.5;
   this.birdspd = 0;
   this.ab = 1;

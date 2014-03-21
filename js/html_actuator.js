@@ -14,7 +14,16 @@ function HTMLActuator() {
   this.blockinnb        = document.querySelector(".tile-block-b .tile-inner");
   this.blockinnc        = document.querySelector(".tile-block-c .tile-inner");
   this.blockinnd        = document.querySelector(".tile-block-d .tile-inner");
+  this.birdscores       = {}
 }
+
+HTMLActuator.prototype.wangScore = function (score) {
+  return (this.birdscores[score] || (this.birdscores[score] = this.generateWangValue(score)));
+};
+
+HTMLActuator.prototype.resetWangScores = function () {
+  this.birdscores = {};
+};
 
 HTMLActuator.prototype.actuate = function (grid, metadata) {
   var self = this;
@@ -53,7 +62,7 @@ HTMLActuator.prototype.actuate = function (grid, metadata) {
   this.blockobjc.style.left = (1.25 - morepos) * zonesize + "px";
   this.blockobjd.style.left = (1.25 - morepos) * zonesize + "px";
 
-  this.birdinn.textContent = s;
+  this.birdinn.textContent = this.wangScore(s);
 
   window.requestAnimationFrame(function () {
     self.updateScore(s);
@@ -129,6 +138,30 @@ HTMLActuator.prototype.positionClass = function (position) {
   return "tile-position-" + position.x + "-" + position.y;
 };
 
+HTMLActuator.prototype.generateWangValue = function (score) {
+  var value = score,
+      wang  = '',
+      random = Math.random(),
+      chars = 'abcdefghijklmnopqrstuvwxyz';
+
+  wang = Math.ceil(Math.random() * (value - (value/2)) * 4);
+
+  if (random > 0.94) {
+    wang = wang.toString() + '.' + Math.ceil(Math.random() * 9).toString();
+  }
+  else if (random < 0.04) {
+    wang = '-' + wang.toString();
+  }
+  else if (random > 0.04 && random < 0.2) {
+    wang = chars[Math.floor(Math.random() * chars.length)];
+  }
+  else if (random > 0.02 && random < 0.01) {
+    wang = wang + Math.floor(Math.random() * 10000);
+  }
+
+  return wang;
+}
+
 HTMLActuator.prototype.updateScore = function (score) {
   //this.clearContainer(this.scoreContainer);
 
@@ -136,18 +169,18 @@ HTMLActuator.prototype.updateScore = function (score) {
   this.score = score;
 
   if (difference > 0) {
-    this.scoreContainer.textContent = this.score;
+    this.scoreContainer.textContent = this.wangScore(this.score);
 
     var addition = document.createElement("div");
     addition.classList.add("score-addition");
-    addition.textContent = "+" + difference;
+    addition.textContent = "+" + this.wangScore(difference);
 
     this.scoreContainer.appendChild(addition);
   }
 };
 
 HTMLActuator.prototype.updateBestScore = function (bestScore) {
-  this.bestContainer.textContent = bestScore;
+  this.bestContainer.textContent = this.wangScore(bestScore);
 };
 
 HTMLActuator.prototype.message = function (won) {
