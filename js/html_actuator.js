@@ -14,15 +14,21 @@ function HTMLActuator() {
   this.blockinnb        = document.querySelector(".tile-block-b .tile-inner");
   this.blockinnc        = document.querySelector(".tile-block-c .tile-inner");
   this.blockinnd        = document.querySelector(".tile-block-d .tile-inner");
-  this.birdscores       = {}
+  this.birdscoresHigh   = {};
+  this.birdscoresLow    = {};
+  this.thatsNumberwang  = document.querySelector(".thats-numberwang");
 }
 
 HTMLActuator.prototype.wangScore = function (score) {
-  return (this.birdscores[score] || (this.birdscores[score] = this.generateWangValue(score)));
+  if(score > 0) {
+    return (this.birdscoresHigh[score] || (this.birdscoresHigh[score] = this.generateWangValue(score)));
+  } else {
+    return (this.birdscoresLow[score] || (this.birdscoresLow[score] = this.generateWangValue(score)));
+  }
 };
 
 HTMLActuator.prototype.resetWangScores = function () {
-  this.birdscores = {};
+  this.birdscoresHigh = {};
 };
 
 HTMLActuator.prototype.actuate = function (grid, metadata) {
@@ -31,6 +37,8 @@ HTMLActuator.prototype.actuate = function (grid, metadata) {
   var classes = ["tile", "tile-bird"];
 
   var s = Math.floor(metadata.score);
+
+  if(s == 0) { this.resetWangScores(); }
 
        if (s > 2048) classes.push("tile-super")
   else if (s > 1024) classes.push("tile-2048")
@@ -143,8 +151,11 @@ HTMLActuator.prototype.generateWangValue = function (score) {
       wang  = '',
       random = Math.random(),
       chars = 'abcdefghijklmnopqrstuvwxyz';
-
-  wang = Math.ceil(Math.random() * (value - (value/2)) * 4);
+  if (score == 0) {
+    wang = 0;
+  } else {
+    wang = Math.ceil(Math.random() * (value - (value/2)) * 6 * (Math.log(value)/Math.log(2) + 1));
+  }
 
   if (random > 0.94) {
     wang = wang.toString() + '.' + Math.ceil(Math.random() * 9).toString();
@@ -152,10 +163,10 @@ HTMLActuator.prototype.generateWangValue = function (score) {
   else if (random < 0.04) {
     wang = '-' + wang.toString();
   }
-  else if (random > 0.04 && random < 0.2) {
+  else if (random > 0.04 && random < 0.046) {
     wang = chars[Math.floor(Math.random() * chars.length)];
   }
-  else if (random > 0.02 && random < 0.01) {
+  else if (random > 0.05 && random < 0.08) {
     wang = wang + Math.floor(Math.random() * 10000);
   }
 
@@ -173,9 +184,17 @@ HTMLActuator.prototype.updateScore = function (score) {
 
     var addition = document.createElement("div");
     addition.classList.add("score-addition");
-    addition.textContent = "+" + this.wangScore(difference);
+    addition.textContent = "+" + this.generateWangValue(difference*10);
 
     this.scoreContainer.appendChild(addition);
+
+    this.clearContainer(this.thatsNumberwang);
+    if (Math.random() > 0.6 && score > 2) {
+      var announce = document.createElement("p");
+      announce.classList.add("show-numberwang");
+      announce.textContent = "That’s Numberwang!";
+      this.thatsNumberwang.appendChild(announce);
+    }
   }
 };
 
