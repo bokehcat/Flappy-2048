@@ -189,7 +189,7 @@ HTMLActuator.prototype.updateScore = function (score) {
     this.scoreContainer.appendChild(addition);
 
     this.clearContainer(this.thatsNumberwang);
-    if (Math.random() > 0.6 && score > 2) {
+    if (Math.random() > 0.8 && score > 2) {
       var announce = document.createElement("p");
       announce.classList.add("show-numberwang");
       announce.textContent = "That’s Numberwang!";
