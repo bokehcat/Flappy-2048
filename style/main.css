@@ -20,7 +20,7 @@ h1.title {
   white-space: nowrap;
   font-size: 50px;
   font-weight: bold;
-  margin: 25px 0 0 0;
+  margin: 0 0 0 0;
   display: block;
   float: left; }
 
@@ -532,14 +532,14 @@ hr {
     font-size: 15px; }
 
   body {
-    margin: 20px 0;
+    margin: 15px 0;
     padding: 0 20px; }
 
   h1.title {
     max-width: 1px;
     white-space: nowrap;
     font-size: 27px;
-    margin-top: 15px; }
+    margin-top: 0px; }
 
   .container {
     width: 280px;
@@ -568,6 +568,21 @@ hr {
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box; }
+    .game-container .thats-numberwang .show-numberwang {
+      position: absolute;
+      font-size: 28px;
+      font-weight: bold;
+      height: 60px;
+      width: 100%;
+      text-align: center;
+      margin-top: 50%;
+      top: -30px;
+      -webkit-animation: fade-in-out 600ms ease-in;
+      -moz-animation: fade-in-out 600ms ease-in;
+      animation: fade-in-out 600ms ease-in;
+      -webkit-animation-fill-mode: both;
+      -moz-animation-fill-mode: both;
+      animation-fill-mode: both; }
     .game-container .game-message {
       display: none;
       position: absolute;
