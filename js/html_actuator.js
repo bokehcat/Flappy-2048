@@ -16,6 +16,8 @@ function HTMLActuator() {
   this.blockinnd        = document.querySelector(".tile-block-d .tile-inner");
   this.birdscoresHigh   = {};
   this.birdscoresLow    = {};
+  this.highscore        = null; // this is getting so god damned hacky.
+  this.highscorewang    = null; // if you decided to fork this, I am sorry.
   this.thatsNumberwang  = document.querySelector(".thats-numberwang");
 }
 
@@ -199,7 +201,14 @@ HTMLActuator.prototype.updateScore = function (score) {
 };
 
 HTMLActuator.prototype.updateBestScore = function (bestScore) {
-  this.bestContainer.textContent = this.wangScore(bestScore);
+  wang = 0;
+  if(this.highscore == bestScore) {
+    wang = this.highscorewang
+  } else {
+    wang = this.highscorewang = this.wangScore(bestScore);
+    this.highscore = bestScore
+  }
+  this.bestContainer.textContent = wang;
 };
 
 HTMLActuator.prototype.message = function (won) {
